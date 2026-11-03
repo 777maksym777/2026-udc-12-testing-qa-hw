@@ -1,0 +1,15 @@
+diff --git a/app/src/server.js b/app/src/server.js
+index 449fc08..aaf7adc 100644
+--- a/app/src/server.js
++++ b/app/src/server.js
+@@ -70,8 +70,8 @@ function send(res, status, body, contentType) {
+ }
+ 
+ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+-  const port = Number(process.env.PORT ?? 3000);
++  const port = Number.parseInt(process.env.PORT ?? "", 10) || 3000;
+   createServer(createHandler()).listen(port, () => {
+-    console.log(`Велопрокат громади: http://localhost:${port}`);
++    console.log(`Велопрокат громади слухає порт ${port}`);
+   });
+ }

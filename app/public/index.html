@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Велопрокат громади — вартість поїздки</title>
+  <style>
+    :root { color-scheme: light dark; --gap: 0.75rem; }
+    body { font: 16px/1.5 system-ui, sans-serif; margin: 0 auto; max-width: 36rem; padding: 1rem; }
+    form { display: grid; gap: var(--gap); }
+    label { display: grid; gap: 0.25rem; font-weight: 600; }
+    fieldset { border: 1px solid #8888; border-radius: 0.5rem; display: grid; gap: var(--gap); }
+    input, select, button { font: inherit; padding: 0.4rem; }
+    button { cursor: pointer; font-weight: 600; }
+    .check { align-items: center; display: flex; font-weight: 400; gap: 0.5rem; }
+    #result { margin-top: 1.5rem; min-height: 3rem; }
+    #result pre { background: #8881; border-radius: 0.5rem; overflow-x: auto; padding: 0.75rem; }
+    .error { color: #c62828; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Вартість поїздки</h1>
+    <p>Час — за київським часом. Правила тарифів: «Тарифи Велопрокату громади», версія 3.</p>
+
+    <form id="quote-form">
+      <label>Велосипед
+        <select name="bike" id="bike">
+          <option value="classic">Класичний</option>
+          <option value="ebike">Електровелосипед</option>
+        </select>
+      </label>
+
+      <fieldset>
+        <legend>Користувач</legend>
+        <label>Категорія
+          <select name="riderType" id="rider-type">
+            <option value="standard">Стандартний</option>
+            <option value="reduced">Пільговий (студент, пенсіонер)</option>
+            <option value="subscriber">Абонент</option>
+          </select>
+        </label>
+        <label class="check"><input type="checkbox" name="concession" id="concession" disabled> Абонент має право на пільгу</label>
+      </fieldset>
+
+      <label>Взяття
+        <input type="datetime-local" name="pickupAt" id="pickup-at" step="1" required value="2026-09-16T09:00:00">
+      </label>
+      <label>Повернення
+        <input type="datetime-local" name="returnAt" id="return-at" step="1" required value="2026-09-16T09:40:00">
+      </label>
+
+      <label>Станція повернення
+        <select name="returnStation" id="return-station">
+          <option value="S01">S01 — Центральна площа</option>
+          <option value="S02">S02 — Залізничний вокзал</option>
+          <option value="S03">S03 — Міський парк</option>
+          <option value="S04">S04 — Ліцей № 2</option>
+          <option value="S05">S05 — Стадіон</option>
+          <option value="S06">S06 — Ринок</option>
+          <option value="S07">S07 — Лікарня</option>
+          <option value="S08">S08 — Бібліотека</option>
+          <option value="X01">X01 — Озеро (пляж), поза зоною</option>
+          <option value="X02">X02 — Садове товариство «Калина», поза зоною</option>
+          <option value="X03">X03 — Промзона, КПП № 1, поза зоною</option>
+        </select>
+      </label>
+
+      <button type="submit">Розрахувати</button>
+    </form>
+
+    <section id="result" aria-live="polite" aria-label="Результат розрахунку"></section>
+  </main>
+
+  <script>
+    const KYIV = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Europe/Kyiv", year: "numeric", month: "2-digit", day: "2-digit",
+      hour: "2-digit", minute: "2-digit", second: "2-digit", hourCycle: "h23",
+    });
+
+    function kyivWallTime(date) {
+      const p = {};
+      for (const { type, value } of KYIV.formatToParts(date)) p[type] = value;
+      return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`;
+    }
+
+    // A datetime-local value is a Kyiv wall-clock time; find the instant it names.
+    function kyivToIso(local) {
+      const wall = local.length === 16 ? `${local}:00` : local;
+      for (const offset of ["+03:00", "+02:00"]) {
+        const iso = `${wall}${offset}`;
+        if (kyivWallTime(new Date(iso)) === wall) return iso;
+      }
+      return `${wall}+02:00`;
+    }
+
+    const form = document.getElementById("quote-form");
+    const result = document.getElementById("result");
+    const riderType = document.getElementById("rider-type");
+    const concession = document.getElementById("concession");
+
+    // The concession right matters only for a subscriber (the other categories have a fixed fare).
+    function syncConcession() {
+      concession.disabled = riderType.value !== "subscriber";
+      if (concession.disabled) concession.checked = false;
+    }
+    riderType.addEventListener("change", syncConcession);
+    syncConcession();
+
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = new FormData(form);
+      const body = {
+        ride: {
+          pickupAt: kyivToIso(data.get("pickupAt")),
+          returnAt: kyivToIso(data.get("returnAt")),
+          bike: data.get("bike"),
+          returnStation: data.get("returnStation"),
+        },
+        rider: {
+          type: data.get("riderType"),
+          concession: data.get("riderType") === "subscriber" && data.get("concession") === "on",
+        },
+      };
+      result.textContent = "Розраховуємо…";
+      try {
+        const response = await fetch("/api/quote", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(body),
+        });
+        const json = await response.json();
+        result.replaceChildren();
+        if (!response.ok) {
+          const p = document.createElement("p");
+          p.className = "error";
+          p.textContent = `Помилка: ${json.error}`;
+          result.append(p);
+          return;
+        }
+        const heading = document.createElement("h2");
+        heading.textContent = "Чек";
+        const pre = document.createElement("pre");
+        pre.textContent = json.receipt.join("\n");
+        result.append(heading, pre);
+      } catch (err) {
+        result.textContent = `Помилка з'єднання: ${err.message}`;
+      }
+    });
+  </script>
+</body>
+</html>

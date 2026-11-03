@@ -1,0 +1,7 @@
+{
+  "root": ".",
+  "app": "app",
+  "targets": ["app/src/calc.js"],
+  "tests": ["test/unit", "test/spec"],
+  "timeoutMs": 3000
+}

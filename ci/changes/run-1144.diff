@@ -1,0 +1,23 @@
+diff --git a/app/public/index.html b/app/public/index.html
+index 7afa3e1..9d1ccb6 100644
+--- a/app/public/index.html
++++ b/app/public/index.html
+@@ -16,6 +16,7 @@
+     #result { margin-top: 1.5rem; min-height: 3rem; }
+     #result pre { background: #8881; border-radius: 0.5rem; overflow-x: auto; padding: 0.75rem; }
+     .error { color: #c62828; }
++    .hint { color: #666; font-size: 0.9rem; margin: -0.5rem 0 0; }
+   </style>
+ </head>
+ <body>
+@@ -47,8 +48,9 @@
+         <input type="datetime-local" name="pickupAt" id="pickup-at" step="1" required value="2026-09-16T09:00:00">
+       </label>
+       <label>Повернення
+-        <input type="datetime-local" name="returnAt" id="return-at" step="1" required value="2026-09-16T09:40:00">
++        <input type="datetime-local" name="returnAt" id="return-at" step="1" required value="2026-09-16T09:40:00" aria-describedby="return-hint">
+       </label>
++      <p id="return-hint" class="hint">Поїздка понад 24 години — плюс збір за неповернений велосипед.</p>
+ 
+       <label>Станція повернення
+         <select name="returnStation" id="return-station">

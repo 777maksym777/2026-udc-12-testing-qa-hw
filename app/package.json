@@ -1,0 +1,16 @@
+{
+  "name": "veloprokat",
+  "version": "3.2.0",
+  "private": true,
+  "description": "Community bike share: ride pricing by the tariff specification, receipts, HTTP API and a small web page",
+  "type": "module",
+  "scripts": {
+    "test": "node --test \"test/**/*.test.js\"",
+    "test:unit": "node --test \"test/unit/**/*.test.js\"",
+    "coverage": "node --test --experimental-test-coverage --test-coverage-include=\"src/**\" \"test/unit/**/*.test.js\"",
+    "start": "node src/server.js"
+  },
+  "engines": {
+    "node": ">=22.5"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "udc-ws12-testing-qa-hw",
+  "private": true,
+  "description": "UDC Workshop 12 homework: testing and QA with AI around the community bike share",
+  "type": "module",
+  "scripts": {
+    "test": "npm --prefix app test",
+    "test:unit": "npm --prefix app run test:unit",
+    "coverage": "npm --prefix app run coverage",
+    "mutate": "node tools/mutate.mjs",
+    "test:repeat": "node tools/repeat.mjs",
+    "test:tools": "node --test \"tools/test/*.test.mjs\""
+  },
+  "engines": {
+    "node": ">=22.5"
+  }
+}

@@ -1,0 +1,214 @@
+2026-10-19T07:12:04.0023264Z Current runner version: '2.329.0'
+2026-10-19T07:12:04.0048158Z Runner name: 'hosted-runner-83'
+2026-10-19T07:12:04.0052784Z Runner group name: 'Default'
+2026-10-19T07:12:04.0069060Z Machine name: 'runnervm7f5f5'
+2026-10-19T07:12:04.0077980Z ##[group]Operating System
+2026-10-19T07:12:04.0105272Z Ubuntu
+2026-10-19T07:12:04.0120388Z 24.04.3
+2026-10-19T07:12:04.0136098Z LTS
+2026-10-19T07:12:04.0151840Z ##[endgroup]
+2026-10-19T07:12:04.0171214Z ##[group]Runner Image
+2026-10-19T07:12:04.0173162Z Image: ubuntu-24.04
+2026-10-19T07:12:04.0200962Z Version: 20261013.1
+2026-10-19T07:12:04.0224244Z Included Software: see the runner image release notes for 20261013.1
+2026-10-19T07:12:04.0242314Z Image Release: ubuntu24/20261013.1
+2026-10-19T07:12:04.0250472Z ##[endgroup]
+2026-10-19T07:12:04.0270024Z ##[group]GITHUB_TOKEN Permissions
+2026-10-19T07:12:04.0299262Z Contents: read
+2026-10-19T07:12:04.0305124Z Metadata: read
+2026-10-19T07:12:04.0309468Z PullRequests: read
+2026-10-19T07:12:04.0333944Z ##[endgroup]
+2026-10-19T07:12:04.0335756Z Secret source: Actions
+2026-10-19T07:12:04.0347958Z Prepare workflow directory
+2026-10-19T07:12:04.0364184Z Prepare all required actions
+2026-10-19T07:12:04.0388538Z Getting action download info
+2026-10-19T07:12:04.0411076Z Download action repository 'actions/checkout@v4' (SHA:f7743afc49e423b66050e08d82a050bae58dae34)
+2026-10-19T07:12:04.0414436Z Download action repository 'actions/setup-node@v4' (SHA:013040292f1d84004d374f77dba0317e08893228)
+2026-10-19T07:12:04.0430300Z Complete job name: test (24.x)
+2026-10-19T07:12:05.3252814Z ##[group]Run actions/checkout@v4
+2026-10-19T07:12:05.3254496Z with:
+2026-10-19T07:12:05.3275296Z   repository: hromada-dev/veloprokat
+2026-10-19T07:12:05.3281964Z   token: ***
+2026-10-19T07:12:05.3292724Z   ssh-strict: true
+2026-10-19T07:12:05.3293628Z   ssh-user: git
+2026-10-19T07:12:05.3319422Z   persist-credentials: true
+2026-10-19T07:12:05.3336990Z   clean: true
+2026-10-19T07:12:05.3365628Z   sparse-checkout-cone-mode: true
+2026-10-19T07:12:05.3380452Z   fetch-depth: 1
+2026-10-19T07:12:05.3409912Z   fetch-tags: false
+2026-10-19T07:12:05.3439532Z   show-progress: true
+2026-10-19T07:12:05.3463088Z   lfs: false
+2026-10-19T07:12:05.3470316Z   submodules: false
+2026-10-19T07:12:05.3489180Z   set-safe-directory: true
+2026-10-19T07:12:05.3515944Z ##[endgroup]
+2026-10-19T07:12:05.3532992Z Syncing repository: hromada-dev/veloprokat
+2026-10-19T07:12:05.3539044Z ##[group]Getting Git version info
+2026-10-19T07:12:05.3555720Z Working directory is '/home/runner/work/veloprokat/veloprokat'
+2026-10-19T07:12:05.3568702Z [command]/usr/bin/git version
+2026-10-19T07:12:05.3585236Z git version 2.51.0
+2026-10-19T07:12:05.3613388Z ##[endgroup]
+2026-10-19T07:12:05.3628128Z Temporarily overriding HOME='/home/runner/work/_temp/18f612d5-d7f2-1ce6-3a20-b1fe2b54e07d' before making global git config changes
+2026-10-19T07:12:05.3632588Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-19T07:12:05.3648552Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/veloprokat/veloprokat
+2026-10-19T07:12:05.3664028Z Deleting the contents of '/home/runner/work/veloprokat/veloprokat'
+2026-10-19T07:12:05.3673216Z ##[group]Initializing the repository
+2026-10-19T07:12:05.3683796Z [command]/usr/bin/git init /home/runner/work/veloprokat/veloprokat
+2026-10-19T07:12:05.3702020Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-10-19T07:12:05.3706092Z hint: is subject to change. To configure the initial branch name to use in all
+2026-10-19T07:12:05.3730624Z hint: of your new repositories, which will suppress this warning, call:
+2026-10-19T07:12:05.3758528Z hint:
+2026-10-19T07:12:05.3772592Z hint: 	git config --global init.defaultBranch <name>
+2026-10-19T07:12:05.3782632Z hint:
+2026-10-19T07:12:05.3800040Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-10-19T07:12:05.3816400Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-10-19T07:12:05.3836278Z hint:
+2026-10-19T07:12:05.3860654Z hint: 	git branch -m <name>
+2026-10-19T07:12:05.3861756Z Initialized empty Git repository in /home/runner/work/veloprokat/veloprokat/.git/
+2026-10-19T07:12:05.3876660Z [command]/usr/bin/git remote add origin https://git.example.org/hromada-dev/veloprokat
+2026-10-19T07:12:05.3900992Z ##[endgroup]
+2026-10-19T07:12:05.3912728Z ##[group]Disabling automatic garbage collection
+2026-10-19T07:12:05.3933728Z [command]/usr/bin/git config --local gc.auto 0
+2026-10-19T07:12:05.3949436Z ##[endgroup]
+2026-10-19T07:12:05.3954704Z ##[group]Setting up auth
+2026-10-19T07:12:05.3968528Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T07:12:05.3971884Z [command]/usr/bin/git config --local http.https://git.example.org/.extraheader AUTHORIZATION: basic ***
+2026-10-19T07:12:05.3994744Z ##[endgroup]
+2026-10-19T07:12:05.3996544Z ##[group]Fetching the repository
+2026-10-19T07:12:05.4005724Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +619e936baccde957497e78ff0f4d7067ddeccf5b:refs/remotes/pull/231/merge
+2026-10-19T07:12:05.4013524Z From https://git.example.org/hromada-dev/veloprokat
+2026-10-19T07:12:05.4022440Z  * [new ref]         619e936baccde957497e78ff0f4d7067ddeccf5b -> pull/231/merge
+2026-10-19T07:12:05.4048540Z ##[endgroup]
+2026-10-19T07:12:05.4049836Z ##[group]Determining the checkout info
+2026-10-19T07:12:05.4060116Z ##[endgroup]
+2026-10-19T07:12:05.4077574Z [command]/usr/bin/git sparse-checkout disable
+2026-10-19T07:12:05.4079132Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-10-19T07:12:05.4096834Z ##[group]Checking out the ref
+2026-10-19T07:12:05.4108384Z [command]/usr/bin/git checkout --progress --force refs/remotes/pull/231/merge
+2026-10-19T07:12:05.4112176Z Note: switching to 'refs/remotes/pull/231/merge'.
+2026-10-19T07:12:05.4136792Z 
+2026-10-19T07:12:05.4165494Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-10-19T07:12:05.4171996Z changes and commit them, and you can discard any commits you make in this
+2026-10-19T07:12:05.4184928Z state without impacting any branches by switching back to a branch.
+2026-10-19T07:12:05.4207970Z 
+2026-10-19T07:12:05.4215592Z HEAD is now at 619e936 Merge 2618d88dc493f76a857b2e08f2ad1f2604ee2ee8 into d5dffd283a1111b1468cd5b9631a48bc016ca9f3
+2026-10-19T07:12:05.4216440Z ##[endgroup]
+2026-10-19T07:12:05.4223228Z [command]/usr/bin/git log -1 --format=%H
+2026-10-19T07:12:05.4235504Z 619e936baccde957497e78ff0f4d7067ddeccf5b
+2026-10-19T07:12:05.9202410Z ##[group]Run actions/setup-node@v4
+2026-10-19T07:12:05.9217240Z with:
+2026-10-19T07:12:05.9217864Z   node-version: 24.x
+2026-10-19T07:12:05.9233928Z   cache: npm
+2026-10-19T07:12:05.9245796Z   cache-dependency-path: app/package-lock.json
+2026-10-19T07:12:05.9269880Z   always-auth: false
+2026-10-19T07:12:05.9278884Z   check-latest: false
+2026-10-19T07:12:05.9308674Z   token: ***
+2026-10-19T07:12:05.9308984Z ##[endgroup]
+2026-10-19T07:12:05.9327804Z Found in cache @ /opt/hostedtoolcache/node/24.11.1/x64
+2026-10-19T07:12:05.9337008Z ##[group]Environment details
+2026-10-19T07:12:05.9361188Z node: v24.11.1
+2026-10-19T07:12:05.9370608Z npm: 11.6.2
+2026-10-19T07:12:05.9378156Z yarn: 1.22.22
+2026-10-19T07:12:05.9403396Z ##[endgroup]
+2026-10-19T07:12:05.9429708Z [command]/opt/hostedtoolcache/node/24.11.1/x64/bin/npm config get cache
+2026-10-19T07:12:05.9435336Z /home/runner/.npm
+2026-10-19T07:12:05.9450856Z Cache hit for: node-cache-Linux-x64-npm-ce66d0b48a2087bb8e4e1cffadb862857ae5601d346ed402d2afea21f5748763
+2026-10-19T07:12:05.9461492Z Received 248 of 248 (100.0%), 0.0 MBs/sec
+2026-10-19T07:12:05.9463336Z Cache Size: ~0 MB (248 B)
+2026-10-19T07:12:05.9472186Z [command]/usr/bin/tar -xf /home/runner/work/_temp/a1fa6f39-db3a-23cd-77d7-d5625e76f9b4/cache.tzst -P -C /home/runner/work/veloprokat/veloprokat --use-compress-program unzstd
+2026-10-19T07:12:05.9490536Z Cache restored successfully
+2026-10-19T07:12:05.9518388Z Cache restored from key: node-cache-Linux-x64-npm-ce66d0b48a2087bb8e4e1cffadb862857ae5601d346ed402d2afea21f5748763
+2026-10-19T07:12:06.3509692Z ##[group]Run npm ci
+2026-10-19T07:12:06.3532588Z npm ci
+2026-10-19T07:12:06.3562260Z shell: /usr/bin/bash -e {0}
+2026-10-19T07:12:06.3563564Z env:
+2026-10-19T07:12:06.3572332Z   CI: true
+2026-10-19T07:12:06.3591564Z ##[endgroup]
+2026-10-19T07:12:06.3607004Z npm warn Unknown project config "always-auth". This will stop working in the next major version of npm.
+2026-10-19T07:12:06.3612596Z 
+2026-10-19T07:12:06.3632252Z added 0 packages, and audited 1 package in 694ms
+2026-10-19T07:12:06.3656228Z 
+2026-10-19T07:12:06.3670226Z found 0 vulnerabilities
+2026-10-19T07:12:06.7862988Z ##[group]Run npm audit --audit-level=high
+2026-10-19T07:12:06.7883748Z npm audit --audit-level=high
+2026-10-19T07:12:06.7897898Z shell: /usr/bin/bash -e {0}
+2026-10-19T07:12:06.7902228Z env:
+2026-10-19T07:12:06.7920110Z   CI: true
+2026-10-19T07:12:06.7921532Z ##[endgroup]
+2026-10-19T07:12:08.1301210Z found 0 vulnerabilities
+2026-10-19T07:12:08.8455760Z ##[group]Run npm test
+2026-10-19T07:12:08.8458840Z npm test
+2026-10-19T07:12:08.8474272Z shell: /usr/bin/bash -e {0}
+2026-10-19T07:12:08.8503044Z env:
+2026-10-19T07:12:08.8510756Z   CI: true
+2026-10-19T07:12:08.8531660Z ##[endgroup]
+2026-10-19T07:12:08.8544948Z 
+2026-10-19T07:12:08.8556512Z > veloprokat@3.2.0 test
+2026-10-19T07:12:08.8567732Z > node --test "test/**/*.test.js"
+2026-10-19T07:12:08.8577154Z 
+2026-10-19T07:12:08.8590226Z ✔ every receipt of a week of rides ends with the amount due (7.260654ms)
+2026-10-19T07:12:08.8607196Z ✔ a receipt lists the fee for a return outside the zone (8.731049ms)
+2026-10-19T07:12:08.8626548Z ✖ a ride on the night the clocks go back is billed by the station clock (5.513908ms)
+2026-10-19T07:12:08.8644628Z ✔ a ride the evening before the change is not affected (5.086860ms)
+2026-10-19T07:12:08.8656064Z ✔ charges recorded for a day reduce what is left of the cap (8.963484ms)
+2026-10-19T07:12:08.8673968Z ✔ the day of a ride is the date of its pickup (5.227123ms)
+2026-10-19T07:12:08.8688364Z ✔ amounts are shown in hryvnias (2.708570ms)
+2026-10-19T07:12:08.8701028Z ✔ a receipt has a line for every item (8.607224ms)
+2026-10-19T07:12:08.8717960Z ✔ GET / serves the page and GET /api/health answers (2.504786ms)
+2026-10-19T07:12:08.8730492Z ✔ POST /api/quote returns the quote and the receipt (8.510278ms)
+2026-10-19T07:12:08.8741572Z ✔ POST /api/quote answers 400 to a body that is not JSON (1.148958ms)
+2026-10-19T07:12:08.8752536Z ✔ quote returns an itemised price (8.214155ms)
+2026-10-19T07:12:08.8765688Z ✔ a ride of 30 min 20 s is billed as one block (3.343244ms)
+2026-10-19T07:12:08.8782096Z ✔ e-bikes are billed at the e-bike rate (5.900773ms)
+2026-10-19T07:12:08.8801008Z ✔ subscribers ride the first 45 minutes free (3.427264ms)
+2026-10-19T07:12:08.8812336Z ✔ subscription on a long e-bike ride (3.549329ms)
+2026-10-19T07:12:08.8823592Z ✔ reduced fare for a ride returned outside the zone (7.035072ms)
+2026-10-19T07:12:08.8837334Z ✔ night rides get 30 % off (6.995148ms)
+2026-10-19T07:12:08.8855592Z ✔ a bike kept over a day and left outside the zone pays both fees (2.021915ms)
+2026-10-19T07:12:08.8871188Z ✔ the daily cap limits the time charge (2.203582ms)
+2026-10-19T07:12:08.8886984Z ✔ a 45-minute classic ride costs 50 UAH (6.413010ms)
+2026-10-19T07:12:08.8905000Z ✔ a return before the pickup is rejected (7.883342ms)
+2026-10-19T07:12:08.8917376Z ℹ tests 22
+2026-10-19T07:12:08.8934142Z ℹ suites 0
+2026-10-19T07:12:08.8950216Z ℹ pass 21
+2026-10-19T07:12:08.8969406Z ℹ fail 1
+2026-10-19T07:12:08.8986688Z ℹ cancelled 0
+2026-10-19T07:12:08.9005320Z ℹ skipped 0
+2026-10-19T07:12:08.9017974Z ℹ todo 0
+2026-10-19T07:12:08.9028492Z ℹ duration_ms 620.000129
+2026-10-19T07:12:08.9045102Z 
+2026-10-19T07:12:08.9062470Z ✖ failing tests:
+2026-10-19T07:12:08.9081496Z 
+2026-10-19T07:12:08.9097420Z test at test/unit/clock-change.test.js:8:1
+2026-10-19T07:12:08.9113960Z ✖ a ride on the night the clocks go back is billed by the station clock (5.513908ms)
+2026-10-19T07:12:08.9130392Z   AssertionError [ERR_ASSERTION]: tariff.quote() miscounts the ride across the DST change
+2026-10-19T07:12:08.9145640Z   
+2026-10-19T07:12:08.9164144Z   180 !== 120
+2026-10-19T07:12:08.9179888Z   
+2026-10-19T07:12:08.9192462Z       at TestContext.<anonymous> (file:///home/runner/work/veloprokat/veloprokat/app/test/unit/clock-change.test.js:11:10)
+2026-10-19T07:12:08.9206318Z       at Test.runInAsyncScope (node:async_hooks:227:14)
+2026-10-19T07:12:08.9222192Z       at Test.run (node:internal/test_runner/test:1325:25)
+2026-10-19T07:12:08.9236164Z       at Test.start (node:internal/test_runner/test:1191:17)
+2026-10-19T07:12:08.9246298Z       at startSubtestAfterBootstrap (node:internal/test_runner/harness:385:17) {
+2026-10-19T07:12:08.9265060Z     generatedMessage: false,
+2026-10-19T07:12:08.9283274Z     code: 'ERR_ASSERTION',
+2026-10-19T07:12:08.9299338Z     actual: 180,
+2026-10-19T07:12:08.9309880Z     expected: 120,
+2026-10-19T07:12:08.9327808Z     operator: 'strictEqual',
+2026-10-19T07:12:08.9340478Z     diff: 'simple'
+2026-10-19T07:12:08.9358458Z   }
+2026-10-19T07:12:08.9760080Z ##[error]Process completed with exit code 1.
+2026-10-19T07:12:09.5015756Z Post job cleanup.
+2026-10-19T07:12:09.5020188Z Post Run actions/setup-node@v4
+2026-10-19T07:12:09.5041074Z Cache hit occurred on the primary key node-cache-Linux-x64-npm-ce66d0b48a2087bb8e4e1cffadb862857ae5601d346ed402d2afea21f5748763, not saving cache.
+2026-10-19T07:12:09.5048920Z Post Run actions/checkout@v4
+2026-10-19T07:12:09.5078220Z [command]/usr/bin/git version
+2026-10-19T07:12:09.5107442Z git version 2.51.0
+2026-10-19T07:12:09.5122276Z Temporarily overriding HOME='/home/runner/work/_temp/492e8027-c573-946f-b7e1-0888b311e38f' before making global git config changes
+2026-10-19T07:12:09.5149452Z Adding repository directory to the temporary git global config as a safe directory
+2026-10-19T07:12:09.5157880Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/veloprokat/veloprokat
+2026-10-19T07:12:09.5163568Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-10-19T07:12:09.5175580Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/git\.example\.org\/\.extraheader
+2026-10-19T07:12:09.5204596Z http.https://git.example.org/.extraheader
+2026-10-19T07:12:09.5228940Z [command]/usr/bin/git config --local --unset-all http.https://git.example.org/.extraheader
+2026-10-19T07:12:09.5246112Z Cleaning up orphan processes
+2026-10-19T07:12:09.5274244Z ##[warning]Node.js 20 actions are deprecated. The following actions are running on Node.js 20 and may not work as expected: actions/setup-node@v4. Actions will be forced to run with Node.js 24 by default. For more information see the runner deprecation notice.

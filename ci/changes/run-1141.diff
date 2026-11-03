@@ -1,0 +1,25 @@
+diff --git a/app/test/unit/clock-change.test.js b/app/test/unit/clock-change.test.js
+new file mode 100644
+index 0000000..a225e6e
+--- /dev/null
++++ b/app/test/unit/clock-change.test.js
+@@ -0,0 +1,19 @@
++import test from "node:test";
++import assert from "node:assert/strict";
++import { quote } from "../../src/tariff.js";
++
++// On 25.10.2026 the clocks in Kyiv go back at 04:00 (EEST +03:00 → EET +02:00).
++const ride = (pickupAt, returnAt) => ({ pickupAt, returnAt, bike: "classic", returnStation: "S02" });
++
++test("a ride on the night the clocks go back is billed by the station clock", () => {
++  // 02:30 → 04:30 on the station clock
++  const result = quote(ride("2026-10-25T02:30:00+03:00", "2026-10-25T04:30:00+02:00"), { type: "standard" });
++  assert.equal(result.minutes, 120, "tariff.quote() miscounts the ride across the DST change");
++  assert.equal(result.timeCharge, 4 * 2500);
++});
++
++test("a ride the evening before the change is not affected", () => {
++  const result = quote(ride("2026-10-24T21:00:00+03:00", "2026-10-24T22:00:00+03:00"), { type: "standard" });
++  assert.equal(result.minutes, 60);
++  assert.equal(result.timeCharge, 2 * 2500);
++});

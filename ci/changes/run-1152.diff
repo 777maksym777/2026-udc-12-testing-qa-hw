@@ -1,0 +1,24 @@
+diff --git a/app/src/tariff.js b/app/src/tariff.js
+index 86091d5..ff90207 100644
+--- a/app/src/tariff.js
++++ b/app/src/tariff.js
+@@ -102,11 +102,15 @@ export function discount(amount, percent) {
+   return amount - Math.floor((amount * (100 - percent)) / 100);
+ }
+ 
++/** Fees of a ride: T7 out of zone, T8 over 24 h. */
+ function feesFor(minutes, zone) {
+-  const fees = [];
+-  if (zone === "out") fees.push({ code: "out-of-zone", amount: OUT_OF_ZONE_FEE });
+-  if (minutes > UNRETURNED_AFTER_MINUTES) fees.push({ code: "unreturned", amount: UNRETURNED_FEE });
+-  return fees;
++  if (zone === "out") return [fee("out-of-zone", OUT_OF_ZONE_FEE)];
++  if (minutes > UNRETURNED_AFTER_MINUTES) return [fee("unreturned", UNRETURNED_FEE)];
++  return [];
++}
++
++function fee(code, amount) {
++  return { code, amount };
+ }
+ 
+ function readRide(ride, zones) {

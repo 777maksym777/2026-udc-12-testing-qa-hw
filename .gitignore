@@ -1,0 +1,11 @@
+node_modules/
+.env
+.env.*
+out/
+coverage/
+*.log
+# ci/runs/ holds the CI logs for Task D — they stay tracked
+!ci/runs/*.log
+.DS_Store
+# Windows Git Bash safety: never commit an accidental NUL device file
+nul
