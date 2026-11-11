@@ -60,9 +60,8 @@ export function quote(ride, rider, { zones = stationZones, dayCap } = {}) {
   }
   dayCap?.record(rider.id, pickup, due);
 
-  const fees = feesFor(minutes, zone).map((fee) =>
-    plan.code === "reduced" ? { code: fee.code, amount: fee.amount - discount(fee.amount, REDUCED_PERCENT) } : fee,
-  );
+  // T5: the reduced fare never applies to fees (T7, T8).
+  const fees = feesFor(minutes, zone);
   const total = fees.reduce((sum, fee) => sum + fee.amount, due);
   return { minutes, timeCharge, discounts, fees, total };
 }
