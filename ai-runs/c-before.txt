@@ -1,0 +1,77 @@
+✔ charges recorded for a day reduce what is left of the cap (2.3172ms)
+✔ the day of a ride is the date of its pickup (0.4525ms)
+✔ amounts are shown in hryvnias (1.2136ms)
+✔ a receipt has a line for every item (0.4497ms)
+✔ GET / serves the page and GET /api/health answers (3.1296ms)
+✔ POST /api/quote returns the quote and the receipt (5.007ms)
+✔ POST /api/quote answers 400 to a body that is not JSON (1.3369ms)
+✔ quote returns an itemised price (2.0148ms)
+✔ a ride of 30 min 20 s rounds up to 31 min and opens a second block (T1, T3) (0.1739ms)
+✔ e-bikes are billed at the e-bike rate (0.1403ms)
+✔ subscribers ride a classic bike free for the first 45 minutes; an e-bike gets 20 % off, no free minutes (T4) (0.2502ms)
+✔ subscription on a long e-bike ride (0.1746ms)
+✔ reduced fare cuts the time charge in half but never the fees (T5, T7) (0.2083ms)
+✔ night rides get 30 % off (0.1819ms)
+✔ a bike kept over a day and left outside the zone pays both fees (0.1592ms)
+✔ the daily cap limits the time charge (0.489ms)
+✔ a 45-minute classic ride costs 50 UAH (0.4819ms)
+✔ a return before the pickup is rejected (0.5801ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 212.3455
+ℹ start of coverage report
+ℹ --------------------------------------------------------------
+ℹ file          | line % | branch % | funcs % | uncovered lines
+ℹ --------------------------------------------------------------
+ℹ src           |        |          |         | 
+ℹ  day-cap.js   |  96.67 |   100.00 |   83.33 | 27
+ℹ  kyiv-time.js | 100.00 |   100.00 |  100.00 | 
+ℹ  receipt.js   | 100.00 |    75.00 |  100.00 | 
+ℹ  server.js    |  89.61 |    73.91 |   71.43 | 36 39-40 73-77
+ℹ  tariff.js    |  98.58 |    83.33 |  100.00 | 136-137
+ℹ  zones.js     |  96.55 |    75.00 |   66.67 | 24
+ℹ --------------------------------------------------------------
+ℹ all files     |  96.42 |    81.91 |   88.24 | 
+ℹ --------------------------------------------------------------
+ℹ end of coverage report
+мутантів: 83, паралельно: 2, базовий прогін: 441 мс
+  10/83
+  20/83
+  30/83
+  40/83
+  50/83
+  60/83
+  70/83
+  80/83
+  83/83
+Мутаційне тестування
+  цілі:   app/src/tariff.js, app/src/day-cap.js
+  тести:  app/test/unit, app/test/spec — файлів: 10, тестів: 55, пропущено: 0, todo: 0, викликів assert: 60
+
+файл                мутантів     вбито    вижило   таймаут     score
+app/src/tariff.js         76        64        12         0    84.2 %
+app/src/day-cap.js         7         5         2         0    71.4 %
+разом                     83        69        14         0    83.1 %
+
+Вижили (14) — тести не помітили цієї зміни:
+  M014  app/src/tariff.js:28:46     60 → 61                     export const UNRETURNED_AFTER_MINUTES = 24 * 60;
+  M016  app/src/tariff.js:47:21     0 → 1                       if (plan.amount > 0) discounts.push({ code: plan.code, amount: plan...
+  M018  app/src/tariff.js:50:11     > → >=                      if (due > 0 && kyivTime(pickup).hour < NIGHT_UNTIL_HOUR) {
+  M019  app/src/tariff.js:50:13     0 → 1                       if (due > 0 && kyivTime(pickup).hour < NIGHT_UNTIL_HOUR) {
+  M023  app/src/tariff.js:57:11     > → >=                      if (due > allowance) {
+  M024  app/src/tariff.js:58:51     - → +                       discounts.push({ code: "day-cap", amount: due - allowance });
+  M030  app/src/tariff.js:71:42     60_000 → 60001              return Math.ceil((returned - pickup) / 60_000);
+  M054  app/src/tariff.js:108:19    Math.floor → Math.ceil      return amount - Math.floor((amount * (100 - percent)) / 100);
+  M055  app/src/tariff.js:108:19    Math.floor → Math.round     return amount - Math.floor((amount * (100 - percent)) / 100);
+  M064  app/src/tariff.js:119:13    || → &&                     if (!ride || typeof ride !== "object") throw new QuoteError("ride i...
+  M066  app/src/tariff.js:122:16    < → <=                      if (returned < pickup) throw new QuoteError("returnAt is before pic...
+  M075  app/src/tariff.js:135:33    || → &&                     if (typeof value !== "string" || !ISO_DATE_TIME.test(value)) {
+  M080  app/src/day-cap.js:20:76    0 → 1                       return Math.max(0, limit - (charged.get(keyOf(riderId, pickupAt)) ?...
+  M083  app/src/day-cap.js:27:50    0 → 1                       return charged.get(`${riderId}|${day}`) ?? 0;
+
+Час: 31.5 с
