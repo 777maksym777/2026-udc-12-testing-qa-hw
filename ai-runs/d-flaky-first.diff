@@ -1,0 +1,14 @@
+diff --git a/app/test/integration/receipt.test.js b/app/test/integration/receipt.test.js
+index 6c2335e..474d601 100644
+--- a/app/test/integration/receipt.test.js
++++ b/app/test/integration/receipt.test.js
+@@ -12,7 +12,8 @@ test("every receipt of a week of rides ends with the amount due", () => {
+   const rider = randomRider();
+   for (const ride of randomRides(10)) {
+     const minutes = (Date.parse(ride.returnAt) - Date.parse(ride.pickupAt)) / 60_000;
+-    const expected = (Math.floor(minutes / 30) + 1) * PRICE[ride.bike];
++    // T3: each started 30-minute block is charged (exactly 30 min = 1 block, TC-10).
++    const expected = Math.ceil(minutes / 30) * PRICE[ride.bike];
+ 
+     const lines = formatReceipt(quote(ride, rider));
+ 
