@@ -21,10 +21,10 @@ test("quote returns an itemised price", () => {
   }
 });
 
-test("a ride of 30 min 20 s is billed as one block", () => {
+test("a ride of 30 min 20 s rounds up to 31 min and opens a second block (T1, T3)", () => {
   const result = quote(ride("2026-09-16T07:00:00Z", "2026-09-16T07:30:20Z"), standard);
-  assert.equal(result.minutes, 30);
-  assert.equal(result.timeCharge, 2500);
+  assert.equal(result.minutes, 31);
+  assert.equal(result.timeCharge, 5000);
 });
 
 test("e-bikes are billed at the e-bike rate", () => {

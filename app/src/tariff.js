@@ -68,7 +68,8 @@ export function quote(ride, rider, { zones = stationZones, dayCap } = {}) {
 }
 
 function rideMinutes(pickup, returned) {
-  return Math.round((returned - pickup) / 60_000);
+  // T1: a partial minute counts as a full one — round up to whole minutes.
+  return Math.ceil((returned - pickup) / 60_000);
 }
 
 function blocks(minutes) {
