@@ -1,10 +1,12 @@
 // Daily cap on time charges (T6): a ledger of what each rider has been charged per day.
 
+import { kyivTime } from "./kyiv-time.js";
+
 export const DAY_CAP = 30000; // kopecks
 
-/** The day a ride is booked on, from its pickup instant. */
+/** The day a ride is booked on, from its pickup instant: the Kyiv calendar date (T6). */
 export function dayKey(pickupAt) {
-  return new Date(pickupAt).toISOString().slice(0, 10);
+  return kyivTime(new Date(pickupAt)).date;
 }
 
 export function createDayCap({ limit = DAY_CAP } = {}) {
