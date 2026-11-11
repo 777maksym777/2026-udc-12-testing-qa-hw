@@ -83,8 +83,13 @@ function chargeFor(minutes, bike) {
 }
 
 function subscriptionCharge(minutes, bike) {
-  const charge = blocks(Math.max(0, minutes - SUBSCRIPTION_FREE_MINUTES)) * RATES[bike];
-  return bike === "ebike" ? charge - discount(charge, SUBSCRIPTION_EBIKE_PERCENT) : charge;
+  // T4: e-bikes get 20 % off the T3 charge and no free minutes;
+  // classic bikes get the first 45 minutes free, blocks count from the 46th minute.
+  if (bike === "ebike") {
+    const charge = chargeFor(minutes, bike);
+    return charge - discount(charge, SUBSCRIPTION_EBIKE_PERCENT);
+  }
+  return blocks(Math.max(0, minutes - SUBSCRIPTION_FREE_MINUTES)) * RATES[bike];
 }
 
 /** The fare discount: subscription or reduced fare, whichever leaves the rider less to pay. */
