@@ -24,21 +24,30 @@
 
 | # | Запах | Тест (файл:рядок › назва) | Чому це проблема | AI знайшов? |
 |---|---|---|---|---|
-| 1 | Тест мока замість продукту (testing the mock) | `app/test/unit/tariff.test.js:81` › `a 45-minute classic ride costs 50 UAH` | тест створює `mock.fn`, повертає з нього фіксований об'єкт і перевіряє його ж: `quote()` не викликається взагалі — тест не впаде за жодної зміни коду | так (№5 у `ai-runs/c-smells.md`, «Testing the Mock») |
-| 2 | Беззубий оракул (liberal assertions) | `app/test/unit/tariff.test.js:9` › `quote returns an itemised price` | перевіряє лише `total >= 0`, `Array.isArray`, `typeof` — пройде майже за будь-якої реалізації; жодного очікуваного значення зі специфікації | так (№1, «Weak/Vacuous Assertions») |
-| 3 | Нерівність замість точного значення | `app/test/unit/tariff.test.js:71` › `the daily cap limits the time charge` | асерт `last.total <= DAY_CAP`, хоча за T6 третя поїздка має коштувати рівно 6000 коп.; мутанти порога (M023 `>`→`>=`) виживають | так (№3, «Boundary-blind assertion») |
-| 4 | Відносний оракул замість специфікаційного | `app/test/unit/tariff.test.js:45` › `subscription on a long e-bike ride`; `:57` › `night rides get 30 % off` | перевіряється `total < timeCharge` і наявність знижки, а не точні 1750/9600 коп. за T10/T4 — заниження вдвічі тест не помітить | так (№2) |
-| 5 | Підрахунок замість змісту | `app/test/unit/tariff.test.js:66` › `a bike kept over a day and left outside the zone pays both fees` | асерт лише `fees.length === 2` — коди зборів і суми (15000/200000) не перевіряються; мутант суми збору виживає | так (№4) |
-| 6 | Нерівність замість точного залишку | `app/test/unit/day-cap.test.js:5` › `charges recorded for a day reduce what is left of the cap` | `remaining < DAY_CAP` замість точних 18000 коп. після запису 12000 | так (№6) |
-| 7 | Два сценарії в одному тесті | `app/test/unit/server.test.js:29` › `GET / serves the page and GET /api/health answers` | сторінка і health-check — незалежні контракти; падіння одного ховає стан іншого | так (№8, «Eager Test») |
-| 8 | Дублювання продуктової логіки і випадкові дані в оракулі (суміжне: `app/test/integration/`) | `app/test/integration/receipt.test.js:11` › `every receipt of a week of rides ends with the amount due` (+ `app/test/helpers/factory.js:10-11` — `Math.random`) | тест переобчислює ціну власною формулою `floor(min/30)+1` на випадкових поїздках: формула хибна на кратних 30 хв → флакі; це Task D, але запах видно вже тут | так (№7 — агент позначив як суміжний, тека `integration/`) |
+| 1 | Тест мока замість продукту (testing the mock) | `app/test/unit/tariff.test.js:81` › `a 45-minute classic ride costs 50 UAH` | тест створює `mock.fn`, повертає з нього фіксований об'єкт і перевіряє його ж: `quote()` не викликається взагалі — тест не впаде за жодної зміни коду | так — №1 у `ai-runs/c-smells.md` («Testing the Mock») |
+| 2 | Беззубий оракул (liberal assertions) | `app/test/unit/tariff.test.js:9` › `quote returns an itemised price` | перевіряє лише `total >= 0`, `Array.isArray`, `typeof` — пройде майже за будь-якої реалізації; жодного очікуваного значення зі специфікації | так — №4 («слабкі твердження в циклі») |
+| 3 | Нерівність замість точного значення | `app/test/unit/tariff.test.js:71` › `the daily cap limits the time charge` | асерт `last.total <= DAY_CAP`, хоча за T6 третя поїздка має коштувати рівно 6000 коп.; мутанти порога (M023 `>`→`>=`) виживають | так — №2 (навіть як «критичний»: тест зелений і без логіки ліміту, бо кожна поїздка < 30000) |
+| 4 | Відносний оракул замість специфікаційного | `app/test/unit/tariff.test.js:45` › `subscription on a long e-bike ride`; `:57` › `night rides get 30 % off` | перевіряється `total < timeCharge` і наявність знижки, а не точні 1750/12800 коп. за T10/T4 — заниження вдвічі тест не помітить | так — №6 і №7 («Imprecise Assertion») |
+| 5 | Підрахунок замість змісту | `app/test/unit/tariff.test.js:66` › `a bike kept over a day and left outside the zone pays both fees` | асерт лише `fees.length === 2` — коди зборів і суми (15000/200000) не перевіряються; мутант суми збору виживає | так — №8 |
+| 6 | Нерівність замість точного залишку | `app/test/unit/day-cap.test.js:5` › `charges recorded for a day reduce what is left of the cap` | `remaining < DAY_CAP` замість точних 18000 коп. після запису 12000 | так — №5 |
+| 7 | Два сценарії в одному тесті | `app/test/unit/server.test.js:29` › `GET / serves the page and GET /api/health answers` | сторінка і health-check — незалежні контракти; падіння одного ховає стан іншого | так — №11 (ще й помітив відсутність перевірки статусу для `/api/health`) |
+| 8 | Дублювання продуктової логіки і випадкові дані в оракулі (суміжне: `app/test/integration/`) | `app/test/integration/receipt.test.js:11` › `every receipt of a week of rides ends with the amount due` (+ `app/test/helpers/factory.js:10-11` — `Math.random`) | тест переобчислює ціну власною формулою `floor(min/30)+1` на випадкових поїздках: формула хибна на кратних 30 хв → флакі; це Task D, але запах видно вже тут | ні — промпт обмежував скоуп текою `app/test/unit/`, тож це поза його завданням |
 
-Що AI назвав запахом, а я не погоджуюся: «Magic numbers» у очікуваних значеннях
-(2500, 5000 тощо) агент заніс до запахів із застереженням. Для цього репо це
-**не** запах: очікувані копійки — константи зі специфікації, і виносити їх у
-змінні, обчислені з `RATES`, якраз шкідливо (оракул почне повторювати код —
-див. правило 4 в `app/AGENTS.md`). Суму з констант продукту в оракулі
-(`receipt.test.js:8` `PRICE`) я, навпаки, вважаю запахом №8.
+AI знайшов 14 запахів — зокрема чотири, яких не було в моєму списку, і я з ними
+згоден: №3 — тавтологічний оракул у `e-bikes are billed at the e-bike rate`
+(`tariff.test.js:30-34`: очікування обчислене тією самою формулою
+`ceil(minutes/BLOCK)×RATES`, ще й від `result.minutes` — виходу самого SUT);
+№12 — непряме закріплення тарифних сум через HTTP-шар (`server.test.js:38-47`);
+№13 — недіагностичний вхід `08:00Z` у `day-cap.test.js:11` (не відрізняє
+київську добу від UTC — саме тому цей тест не впіймав BUG-5); №9 — чек
+перевіряється лише за довжиною (`receipt-format.test.js:19-20`).
+
+Що AI назвав запахом, а я не погоджуюся: №14 «магічні числа без виведення»
+(`tariff.test.js:51-55`). Для цього репо очікувані копійки літералом — це
+**не** запах, а вимога: значення береться зі специфікації і вписується числом;
+«виводити» його зі змінних `RATES`/формул — якраз шлях до тавтологічного
+оракула з №3 (див. правило 4 в `app/AGENTS.md`). Погоджуюся лише з другою
+половиною №14 — перевіркою збору за індексом `fees[0]` без перевірки `code`.
 
 ## 3. AI посилює тести
 
@@ -46,19 +55,48 @@
 
 | Показник | До | Після |
 |---|---|---|
-| Мутаційний бал | 83.1 % | <…> % |
-| Мутантів вижило | 14 | <…> |
-| Тестів | 55 | <…> |
-| Викликів assert | 60 | <…> |
-| Покриття рядків `src/` | 96.42 % | <…> % |
+| Мутаційний бал | 83.1 % | 97.6 % (tariff.js 97.4 %, day-cap.js 100 %) |
+| Мутантів вижило | 14 | 2 |
+| Тестів | 55 | 66 |
+| Викликів assert | 60 | 85 |
+| Покриття рядків `src/` | 96.42 % | 97.31 % (tariff.js і day-cap.js — 100 %) |
 
 ### Що агент видалив, пропустив або послабив
 
-<заповнюється після прогону>
+Перевірено весь `ai-runs/c-strengthen.diff` (92 вставки, 2 видалені рядки) і
+пошуком: `grep -E "skip|todo" ai-runs/c-strengthen.diff` — порожньо; видалених
+`test(` немає; `app/src/` і `tools/` не змінювалися (diff зачіпає лише
+`app/test/unit/tariff.test.js` і `app/test/unit/day-cap.test.js`). Обидва
+видалені рядки — не послаблення:
+
+| # | Що змінено (файл:рядок) | Рядок з diff | Чому це нормально / проблема |
+|---|---|---|---|
+| 1 | `app/test/unit/day-cap.test.js:8` | `-  assert.ok(ledger.remaining("rider-1", "2026-09-16T12:00:00Z") < DAY_CAP);` → `+ assert.equal(…, DAY_CAP - 12000)` | нормально: нерівність замінено **точним** значенням — це посилення (мій запах № 6) |
+| 2 | `app/test/unit/tariff.test.js:4` | `-import { BLOCK_MINUTES, QuoteError, RATES, quote } …` → `+… discount, …` | нормально: розширення імпорту для прямих тестів `discount()` (T9) |
+| 3 | `app/test/unit/tariff.test.js:147` | `+test("a zero-duration ride (return at the pickup instant) is allowed and free — current behaviour, Q-3", …` | прийнято з застереженням: тест закріплює поведінку з відкритого питання Q-3; агент чесно позначив «current behaviour, Q-3». Залишаю як регресійний пін межі `<` (вбиває M066); якщо власник продукту вирішить Q-3 інакше — тест оновиться разом з кодом |
+
+Неприйнятних змін немає — відкочувати нічого. Очікувані значення наявних тестів
+агент не змінював.
 
 ## 4. Мутанти, що вижили
 
-<заповнюється після прогону>
+Після посилення у списку «Вижили» (`ai-runs/c-after.txt`) лишилося 2 мутанти —
+обидва еквівалентні. Для повноти нижче і вони, і 5 показових мутантів зі списку
+«до» (`ai-runs/c-before.txt`), убитих новими тестами: для кожного видно тест і
+те, що в `ai-runs/c-after.txt` цього номера в «Вижили» вже немає.
+
+| Мутант | Файл:рядок | Зміна | Вбито тестом (файл › назва) / еквівалентний — чому |
+|---|---|---|---|
+| M016 | `app/src/tariff.js:47:21` | `plan.amount > 0` → `> 1` | **еквівалентний за чинних тарифів**: кожна досяжна знижка плану — кратна 800 коп. (абонемент на електро: `timeCharge − floor(0.8·charge)`, обидва кратні 800), 1250 коп. (пільга на класичному: `2500k − floor(2500k/2)`) або 2500 коп. (абонемент на класичному) — значення рівно 1 коп. недосяжне, тож `>0` і `>1` поводяться однаково на всіх входах. Перестане бути еквівалентним, якщо з'являться ціни, не кратні 50 коп. |
+| M019 | `app/src/tariff.js:50:13` | `due > 0` → `> 1` | **еквівалентний за чинних тарифів**: `due = timeCharge − plan.amount` — різниця кратних 800/1250/2500/4000, тобто сама кратна 800 або 1250; `due = 1` коп. недосяжне. Той самий ризик при зміні цін |
+| M023 | `app/src/tariff.js:57:11` | `due > allowance` → `>=` | вбито: `app/test/unit/tariff.test.js` › `T6: a charge that lands exactly on the cap gets no day-cap line` (рівно 30000 → рядка day-cap немає); у «Вижили» `c-after.txt` відсутній |
+| M024 | `app/src/tariff.js:58:51` | `due - allowance` → `+` | вбито: `app/test/unit/tariff.test.js` › `T6: the day-cap discount is exactly what is over the cap` (знижка саме 95000 на 25-годинній поїздці); відсутній у `c-after.txt` |
+| M030 | `app/src/tariff.js:71:42` | `60_000` → `60001` | вбито: `app/test/unit/tariff.test.js` › `T1: milliseconds over a whole minute open the next minute` (30 хв 0.030 с → 31 хв); відсутній у `c-after.txt` |
+| M054, M055 | `app/src/tariff.js:108:19` | `Math.floor` → `ceil`/`round` | вбито: `app/test/unit/tariff.test.js` › `T9: the payable remainder is rounded DOWN to the kopeck` (`discount(1001,30)=301`, `discount(3,50)=2` — дробовий залишок, який floor/ceil/round розрізняють); відсутні у `c-after.txt` |
+| M080 | `app/src/day-cap.js:20:76` | `?? 0` → `?? 1` | вбито: `app/test/unit/day-cap.test.js` › тест «a fresh rider's remaining equals DAY_CAP exactly» (точне `DAY_CAP` для користувача без записів); відсутній у `c-after.txt` |
+
+Разом розібрано 8 мутантів (вимога — ≥ 5): 2 еквівалентні з аргументом, 6 вбиті
+конкретними тестами з підтвердженням у `ai-runs/c-after.txt`.
 
 ## 5. Правила тестування для агента
 
